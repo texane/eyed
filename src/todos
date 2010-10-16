@@ -1,0 +1,6 @@
+. rajouter le double buffering pour la webcam logitech
+ . est ce que ca a une utilite? si oui, le rajouter
+  -> faire le test avec un le timer
+ . interface python
+ . timer le code a vide cote carte
+ . timer le code en python

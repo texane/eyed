@@ -1,0 +1,31 @@
+.todo
+ . http://v4l2spec.bytesex.org/spec/r8494.htm
+
+. v4l
+ . http://staff.aist.go.jp/naoyuki.ichimura/research/tips/v4ln.htm
+ . http://lwn.net/Articles/235023/
+ . http://www.thedirks.org/v4l2/v4l2fmt.htm
+
+. yuv
+ . http://joemaller.com/fcp/fxscript_yuv_color.shtml
+ . http://v4l2spec.bytesex.org/spec/r5470.htm#V4L2-PIX-FMT-NV21
+ . http://www.transcoding.org/cgi-bin/transcode?ColorPlanes
+
+. media
+ . http://wiki.multimedia.cx/
+ . http://wiki.multimedia.cx/index.php?title=YCbCr_4:2:0
+
+. alsa
+ . http://www.alsa-project.org/main/index.php/Main_Page
+ . http://fr.wikipedia.org/wiki/WAVEform_audio_format
+ . http://www.alsa-project.org/alsa-doc/alsa-lib/pcm.html
+ . http://www.alsa-project.org/main/index.php/FramesPeriods
+
+. sounds
+ . http://tipiwiki.free.fr/snd/
+
+. sound conversion
+ . sox
+
+. video surveillance systems
+ . http://www.linuxjournal.com/article/8513

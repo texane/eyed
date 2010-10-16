@@ -1,0 +1,42 @@
+##
+## Made by texane <texane@gmail.com>
+## 
+## Started on Sun Oct 26 16:06:14 2008 texane
+## Updated on Sun Oct 26 22:57:16 2008 texane
+##
+
+
+
+export PATH=/opt/arm/2.95.3/arm-linux/bin:/opt/arm/2.95.3/lib/gcc-lib/arm-linux/2.95.3/:$PATH
+
+    
+CC	:=	/opt/arm/2.95.3/arm-linux/bin/gcc
+LD	:=	/opt/arm/2.95.3/arm-linux/bin/gcc
+CFLAGS	:=	-Wall -O2 -Werror -D_DEBUG=0 -I../src -I/home/texane/proj/present/igrebot/igresys/src/linux-2.6.13/include
+LFLAGS	:=	-static -L/opt/arm/2.95.3/arm-linux/lib/
+LIBS	:=
+RM	:=	/bin/rm -f
+STRIP	:=	/opt/arm/2.95.3/arm-linux/bin/strip
+
+
+BIN	:=	eyed
+
+SRCS	:=	../src/main.c		\
+		../src/cam.c		\
+		../src/transform.c	\
+		../src/bmp.c
+
+OBJS	:=	$(SRCS:.c=.o)
+
+
+all	:	$(BIN)
+$(BIN)	:	$(OBJS)
+		$(LD) $(LFLAGS) -o $(BIN) $(OBJS) $(LIBS)
+		$(STRIP) $(BIN)
+clean	:
+		$(RM) $(OBJS)
+fclean	:	clean
+		$(RM) $(BIN)
+re	:	fclean all
+%.o	:	%.c
+		$(CC) $(CFLAGS) -o $@ -c $<
