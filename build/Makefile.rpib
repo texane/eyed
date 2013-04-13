@@ -1,0 +1,38 @@
+##
+## Made by texane <texane@gmail.com>
+## 
+## Started on Sun Oct 26 16:06:14 2008 texane
+## Updated on Sun Oct 26 22:57:16 2008 texane
+##
+
+
+
+CROSS_COMPILE := $(HOME)/repo/lfs/_work_rpib/host_install/armv6-rpi-linux-gnueabi/bin/armv6-rpi-linux-gnueabi-
+CC	:=	$(CROSS_COMPILE)gcc
+LD	:=	$(CROSS_COMPILE)gcc
+CFLAGS	:=	-Wall -O2 -D_DEBUG=1 -I../src
+CFLAGS  +=	-I$(HOME)/repo/lfs/_work_rpib/src/linux/include
+LFLAGS	:=
+RM	:=	rm -f
+
+
+BIN	:=	eyed
+
+SRCS	:=	../src/main.c		\
+		../src/cam.c		\
+		../src/bmp.c		\
+		../src/transform.c
+
+OBJS	:=	$(SRCS:.c=.o)
+
+
+all	:	$(BIN)
+$(BIN)	:	$(OBJS)
+		$(LD) $(LFLAGS) -o $(BIN) $(OBJS)
+clean	:
+		$(RM) $(OBJS)
+fclean	:	clean
+		$(RM) $(BIN)
+re	:	fclean all
+%.o	:	%.c
+		$(CC) $(CFLAGS) -o $@ -c $<
