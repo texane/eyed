@@ -205,10 +205,10 @@ int main(int ac, char** av)
   cam_err_t err = CAM_ERR_FAILURE;
   cam_dev_t* dev = NULL;
 
-#if 0
-  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUV420_320_240, 1)) != CAM_ERR_SUCCESS)
+#if 1
+  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 1)) != CAM_ERR_SUCCESS)
 #else
-  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_320_240, 0)) != CAM_ERR_SUCCESS)
+  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 0)) != CAM_ERR_SUCCESS)
 #endif
   {
     printf("[!] cam_open_dev() == %u\n", err);

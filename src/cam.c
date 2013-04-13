@@ -17,7 +17,7 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <sys/fcntl.h>
-#include <linux/videodev.h>
+#include <linux/videodev2.h>
 #include "debug.h"
 #include "cam.h"
 
