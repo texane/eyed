@@ -5,9 +5,9 @@
 ## Updated on Sun Oct 26 22:57:16 2008 texane
 ##
 
+include $(HOME)/repo/lfs/_work_rpib_home/sdk/build/env.mk
 
-
-CROSS_COMPILE := $(HOME)/repo/lfs/_work_rpib/host_install/armv6-rpi-linux-gnueabi/bin/armv6-rpi-linux-gnueabi-
+CROSS_COMPILE := $(LFS_SDK_CROSS_COMPILE)
 CC	:=	$(CROSS_COMPILE)gcc
 LD	:=	$(CROSS_COMPILE)gcc
 CFLAGS	:=	-Wall -O2 -D_DEBUG=1 -I../src

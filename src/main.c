@@ -205,7 +205,7 @@ int main(int ac, char** av)
   cam_err_t err = CAM_ERR_FAILURE;
   cam_dev_t* dev = NULL;
 
-#if 1
+#if 0
   if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 1)) != CAM_ERR_SUCCESS)
 #else
   if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 0)) != CAM_ERR_SUCCESS)
