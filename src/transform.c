@@ -10,32 +10,28 @@
 #include <stdint.h>
 
 
+static uint8_t saturate(int x)
+{
+  if (x < 0) x = 0;
+  else if (x > 255) x = 255;
+  return x;
+}
 
 static void yuv_to_rgb(uint8_t* rgb, uint8_t y, uint8_t cr, uint8_t cb)
 {
   int n;
 
   n = (int)y + (int)(1.402 * (double)((int)cr - 128));
-  if (n > 255)
-    n = 255;
-
-  rgb[0] = (uint8_t)n;
+  rgb[0] = saturate(n);
 
   n =
     (int)y -
     0.34414 * (double)((int)cb - 128) -
     0.71414 * (double)((int)cr - 128);
-
-  if (n < 0)
-    n = 0;
-
-  rgb[1] = (uint8_t)n;
+  rgb[1] = saturate(n);
 
   n = (int)y + 1.772 * (double)((int)cb - 128);
-  if (n > 255)
-    n = 255;
-
-  rgb[2] = n;
+  rgb[2] = saturate(n);
 }
 
 
