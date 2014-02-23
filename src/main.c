@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/time.h>
 #include "debug.h"
 #include "cam.h"
@@ -153,7 +154,7 @@ static cam_err_t on_frame(cam_dev_t* dev, cam_frame_t* frame, void* ctx)
 #endif
 
 
-static void get_objects(cam_dev_t* dev)
+static void get_objects(cam_dev_t* dev, const char* im_oname)
 {
   unsigned int i;
   cam_err_t err;
@@ -174,11 +175,7 @@ static void get_objects(cam_dev_t* dev)
   {
     gettimeofday(&context.tms_total[0], NULL);
     {
-#if CONFIG_PROCESSING
       err = cam_capture(dev, on_frame, &context);
-#else /* !CONFIG_PROCESSING */
-      err = cam_capture(dev, on_frame, &context);
-#endif
     }
     gettimeofday(&context.tms_total[1], NULL);
 
@@ -192,7 +189,7 @@ static void get_objects(cam_dev_t* dev)
 #if CONFIG_PROCESSING
   if (err == CAM_ERR_SUCCESS)
   {
-    bmp_store_file(context.bmp, "/tmp/foo.bmp");
+    bmp_store_file(context.bmp, im_oname);
     bmp_destroy(context.bmp);
   }
 #endif
@@ -204,9 +201,12 @@ int main(int ac, char** av)
 {
   cam_err_t err = CAM_ERR_FAILURE;
   cam_dev_t* dev = NULL;
+  const char* const im_oname = ac > 1 ? av[1] : "/tmp/foo.bmp";
 
-#if 0
-  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 1)) != CAM_ERR_SUCCESS)
+  seteuid(0);
+
+#if 1
+  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_320_240, 1)) != CAM_ERR_SUCCESS)
 #else
   if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 0)) != CAM_ERR_SUCCESS)
 #endif
@@ -215,7 +215,7 @@ int main(int ac, char** av)
     goto on_error;
   }
 
-  get_objects(dev);
+  get_objects(dev, im_oname);
 
  on_error:
 

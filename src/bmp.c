@@ -280,7 +280,7 @@ int bmp_store_file(struct bmp* bmp,
 
   res = -1;
 
-  fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0700);
+  fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0755);
   if (fd == -1)
     goto on_error;
 

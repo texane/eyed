@@ -27,6 +27,8 @@ OBJS	:=	$(SRCS:.c=.o)
 all	:	$(BIN)
 $(BIN)	:	$(OBJS)
 		$(LD) $(LFLAGS) -o $(BIN) $(OBJS)
+		sudo chown root $(BIN)
+		sudo chmod 4755 $(BIN)
 clean	:
 		$(RM) $(OBJS)
 fclean	:	clean
