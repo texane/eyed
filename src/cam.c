@@ -253,8 +253,7 @@ static cam_err_t capture_mmap_disabled
   n = select(dev->fd + 1, &rds, NULL, NULL, NULL);
   if (n == -1)
   {
-    if (errno != EINTR)
-      goto on_error;
+    if (errno != EINTR) goto on_error;
   }
   else if (n == 1)
   {
@@ -345,6 +344,7 @@ static cam_err_t start_mmap_enabled(cam_dev_t* dev)
   struct v4l2_requestbuffers req;
   cam_err_t err;
   size_t i;
+  int flags;
 
   /* request buffers
    */
@@ -404,6 +404,9 @@ static cam_err_t start_mmap_enabled(cam_dev_t* dev)
     goto on_error;
   }
 
+  if (!((flags = fcntl(dev->fd, F_GETFL)) & O_NONBLOCK))
+    fcntl(dev->fd, flags | O_NONBLOCK);
+
   err = CAM_ERR_SUCCESS;
 
  on_error:
@@ -436,9 +439,36 @@ static cam_err_t capture_mmap_enabled
   cam_err_t err = CAM_ERR_FAILURE;
   struct cam_frame frame;
   struct v4l2_buffer buffer;
+  unsigned int bug_count = 0;
 
   /* run capture
    */
+
+ redo_select:
+  {
+    /* this fix is required due to some hardware */
+    /* then driver related bug that makes ioctl */
+    /* blocks forever. restart stream on timeout. */
+    fd_set rds;
+    int n;
+    struct timeval tm;
+    FD_ZERO(&rds);
+    FD_SET(dev->fd, &rds);
+    tm.tv_sec = 0;
+    tm.tv_usec = 500000;
+    n = select(dev->fd + 1, &rds, NULL, NULL, &tm);
+    if (n != 1)
+    {
+      stop_mmap_enabled(dev);
+      start_mmap_enabled(dev);
+      if (++bug_count == 4)
+      {
+	err = CAM_ERR_FAILURE;
+	goto on_error;
+      }
+      goto redo_select;
+    }
+  }
 
   memset(&buffer, 0, sizeof(buffer));
   buffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;

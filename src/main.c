@@ -50,66 +50,65 @@ static cam_err_t on_frame(cam_dev_t* dev, cam_frame_t* frame, void* ctx)
    */
 
   switch (frame->format)
-    {
-    case CAM_FORMAT_YUV420_160_120:
-    case CAM_FORMAT_YUV420_320_240:
-    case CAM_FORMAT_YUV420_640_480:
-      transform = transform_yuv420_to_rgb24;
-      break;
+  {
+  case CAM_FORMAT_YUV420_160_120:
+  case CAM_FORMAT_YUV420_320_240:
+  case CAM_FORMAT_YUV420_640_480:
+    transform = transform_yuv420_to_rgb24;
+    break;
 
-    case CAM_FORMAT_YUYV_160_120:
-    case CAM_FORMAT_YUYV_320_240:
-    case CAM_FORMAT_YUYV_640_480:
-      transform = transform_yuyv_to_rgb24;
-      break;
+  case CAM_FORMAT_YUYV_160_120:
+  case CAM_FORMAT_YUYV_320_240:
+  case CAM_FORMAT_YUYV_640_480:
+    transform = transform_yuyv_to_rgb24;
+    break;
 
-    default:
-      err = CAM_ERR_NOT_SUPPORTED;
-      goto on_error;
-      break;
-
-    }
+  default:
+    err = CAM_ERR_NOT_SUPPORTED;
+    goto on_error;
+    break;
+  }
 
   /* choose dimension
    */
 
   switch (frame->format)
-    {
-    case CAM_FORMAT_YUV420_160_120:
-    case CAM_FORMAT_YUYV_160_120:
-      width = 160;
-      height = 120;
-      break;
+  {
+  case CAM_FORMAT_YUV420_160_120:
+  case CAM_FORMAT_YUYV_160_120:
+    width = 160;
+    height = 120;
+    break;
 
-    case CAM_FORMAT_YUV420_320_240:
-    case CAM_FORMAT_YUYV_320_240:
-      width = 320;
-      height = 240;
-      break;
+  case CAM_FORMAT_YUV420_320_240:
+  case CAM_FORMAT_YUYV_320_240:
+    width = 320;
+    height = 240;
+    break;
 
-    case CAM_FORMAT_YUV420_640_480:
-    case CAM_FORMAT_YUYV_640_480:
-      width = 640;
-      height = 480;
-      break;
+  case CAM_FORMAT_YUV420_640_480:
+  case CAM_FORMAT_YUYV_640_480:
+    width = 640;
+    height = 480;
+    break;
 
-    default:
-      err = CAM_ERR_NOT_SUPPORTED;
-      goto on_error;
-      break;
-    }
+  default:
+    err = CAM_ERR_NOT_SUPPORTED;
+    goto on_error;
+    break;
+  }
 
   if (bmp_set_format(capture_ctx->bmp, 24, width, height) == -1)
-    {
-      err = CAM_ERR_FAILURE;
-      goto on_error;
-    }
+  {
+    err = CAM_ERR_FAILURE;
+    goto on_error;
+  }
 
   if ((data = bmp_get_data(capture_ctx->bmp)) == NULL)
-    {
-      err = CAM_ERR_RESOURCE;
-      goto on_error;
-    }
+  {
+    err = CAM_ERR_RESOURCE;
+    goto on_error;
+  }
 
 #if CONFIG_TRANSFORM
   transform(data, frame->data, width, height);
@@ -174,9 +173,7 @@ static void get_objects(cam_dev_t* dev, const char* im_oname)
   for (i = 0; i < 2; ++i)
   {
     gettimeofday(&context.tms_total[0], NULL);
-    {
-      err = cam_capture(dev, on_frame, &context);
-    }
+    err = cam_capture(dev, on_frame, &context);
     gettimeofday(&context.tms_total[1], NULL);
 
     timersub(&context.tms_processing[1], &context.tms_processing[0], &tms[1]);
@@ -205,10 +202,10 @@ int main(int ac, char** av)
 
   seteuid(0);
 
-#if 1
+#if 0
   if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_320_240, 1)) != CAM_ERR_SUCCESS)
 #else
-  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_640_480, 0)) != CAM_ERR_SUCCESS)
+  if ((err = cam_open_dev(&dev, CAM_FORMAT_YUYV_320_240, 0)) != CAM_ERR_SUCCESS)
 #endif
   {
     printf("[!] cam_open_dev() == %u\n", err);
@@ -218,9 +215,6 @@ int main(int ac, char** av)
   get_objects(dev, im_oname);
 
  on_error:
-
-  if (dev != NULL)
-    cam_close_dev(dev);
-
+  if (dev != NULL) cam_close_dev(dev);
   return 0;
 }
